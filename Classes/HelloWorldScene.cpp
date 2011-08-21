@@ -7,8 +7,11 @@
 //
 
 #include "HelloWorldScene.h"
+#include "SimpleAudioEngine.h"
 #include <string>
+
 using namespace std;
+using namespace CocosDenshion;
 USING_NS_CC;
 
 CCScene* HelloWorld::scene()
@@ -48,7 +51,12 @@ bool HelloWorld::init()
 	{
 		return false;
 	}
-
+	
+	SimpleAudioEngine::sharedEngine()->preloadEffect("pickup.caf");
+	SimpleAudioEngine::sharedEngine()->preloadEffect("hit.caf");
+	SimpleAudioEngine::sharedEngine()->preloadEffect("move.caf");
+	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("TileMap.caf");
+	
 	_tileMap = CCTMXTiledMap::tiledMapWithTMXFile("TileMap.tmx");
     _tileMap->retain();
     
@@ -161,6 +169,7 @@ void HelloWorld::setPlayerPosition(cocos2d::CCPoint position)
 			CCString *collision = properties->objectForKey("Collidable");
 			if (collision && (collision->toStdString().compare("True") == 0))
 			{
+				SimpleAudioEngine::sharedEngine()->playEffect("hit.caf");
 				return;
 			}
 			
@@ -172,9 +181,11 @@ void HelloWorld::setPlayerPosition(cocos2d::CCPoint position)
 				
 				_numCollected++;
 				_hud->numCollectedChanged(_numCollected);
+				SimpleAudioEngine::sharedEngine()->playEffect("pickup.caf");
 			}
 		}
 	}
+	SimpleAudioEngine::sharedEngine()->playEffect("move.caf");
 	_player->setPosition(position);
 }
 
