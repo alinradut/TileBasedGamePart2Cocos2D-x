@@ -34,7 +34,9 @@ public:
     CC_SYNTHESIZE(cocos2d::CCTMXTiledMap*, _tileMap, TileMap);
     
     CC_SYNTHESIZE(cocos2d::CCTMXLayer*, _background, Background);
-	
+
+	CC_SYNTHESIZE(cocos2d::CCTMXLayer*, _foreground, Foreground);
+
     CC_SYNTHESIZE(cocos2d::CCTMXLayer*, _meta, Meta);
 	
 	CC_SYNTHESIZE(cocos2d::CCSprite *, _player, Player);

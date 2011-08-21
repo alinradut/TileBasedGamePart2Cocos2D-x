@@ -30,6 +30,7 @@ HelloWorld::~HelloWorld()
 {
 	CC_SAFE_RELEASE_NULL(_tileMap);
 	CC_SAFE_RELEASE_NULL(_background);
+	CC_SAFE_RELEASE_NULL(_foreground);
 	CC_SAFE_RELEASE_NULL(_player);
 	CC_SAFE_RELEASE_NULL(_meta);
 }
@@ -47,6 +48,9 @@ bool HelloWorld::init()
     
 	_background = _tileMap->layerNamed("Background");
     _background->retain();
+    
+	_foreground = _tileMap->layerNamed("Foreground");
+    _foreground->retain();
 	
 	_meta = _tileMap->layerNamed("Meta");
 	_meta->retain();
@@ -149,6 +153,13 @@ void HelloWorld::setPlayerPosition(cocos2d::CCPoint position)
 			if (collision && (collision->toStdString().compare("True") == 0))
 			{
 				return;
+			}
+			
+			CCString *collectable = properties->objectForKey("Collectable");
+			if (collectable && (collectable->toStdString().compare("True") == 0))
+			{
+				_meta->removeTileAt(tileCoord);
+				_foreground->removeTileAt(tileCoord);
 			}
 		}
 	}
