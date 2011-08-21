@@ -22,6 +22,11 @@ CCScene* HelloWorld::scene()
 	// add layer as a child to scene
 	scene->addChild(layer);
 
+	HelloWorldHud *hud = HelloWorldHud::node();
+	hud->retain();
+	scene->addChild(hud);
+	layer->setHud(hud);
+	
 	// return the scene
 	return scene;
 }
@@ -33,6 +38,7 @@ HelloWorld::~HelloWorld()
 	CC_SAFE_RELEASE_NULL(_foreground);
 	CC_SAFE_RELEASE_NULL(_player);
 	CC_SAFE_RELEASE_NULL(_meta);
+	CC_SAFE_RELEASE_NULL(_hud);
 }
 
 // on "init" you need to initialize your instance
@@ -73,6 +79,9 @@ bool HelloWorld::init()
 	this->setViewpointCenter(_player->getPosition());
 	
 	this->setIsTouchEnabled(true);
+	
+	_numCollected = 0;
+	
 	return true;
 }
 
@@ -160,6 +169,9 @@ void HelloWorld::setPlayerPosition(cocos2d::CCPoint position)
 			{
 				_meta->removeTileAt(tileCoord);
 				_foreground->removeTileAt(tileCoord);
+				
+				_numCollected++;
+				_hud->numCollectedChanged(_numCollected);
 			}
 		}
 	}
@@ -172,3 +184,4 @@ CCPoint HelloWorld::tileCoordForPosition(cocos2d::CCPoint position)
     int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
     return ccp(x, y);
 }
+
